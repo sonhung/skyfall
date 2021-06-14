@@ -29,3 +29,6 @@ body {
   line-height: 25px !important;
   padding: 0 8px !important;
 }
+.filter-item:hover {
+  background: #191A1A;
+}

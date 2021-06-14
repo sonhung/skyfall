@@ -1,88 +1,58 @@
-import * as React from 'react';
-
-const camelPattern = /(^|[A-Z])[a-z]*/g;
-function formatSettingName(name) {
-  return name.match(camelPattern).join(' ');
-}
-
-function Checkbox({name, value, onChange}) {
-  return (
-    <div className="input">
-      <label>{formatSettingName(name)}</label>
-      <input type="checkbox" checked={value} onChange={evt => onChange(name, evt.target.checked)} />
-    </div>
-  );
-}
-
-function NumericInput({name, value, onChange}) {
-  return (
-    <div className="input">
-      <label>{formatSettingName(name)}</label>
-      <input
-        type="number"
-        value={value}
-        onChange={evt => onChange(name, Number(evt.target.value))}
-      />
-    </div>
-  );
-}
+import * as React from 'react'
+import css from 'styled-jsx/css'
+import MapLayerDropdown from './MapLayerDropdown'
+import YearDropdown from './YearDropdown'
+import FilterDropdown from './FilterDropdown'
 
 function ControlPanel(props) {
-  const {settings, interactionState, onChange} = props;
-
-  const renderSetting = (name, value) => {
-    switch (typeof value) {
-      case 'boolean':
-        return <Checkbox key={name} name={name} value={value} onChange={onChange} />;
-      case 'number':
-        return <NumericInput key={name} name={name} value={value} onChange={onChange} />;
-      default:
-        return null;
-    }
-  };
 
   return (
     <div className="control-panel">
-      <h3>Limit Map Interaction</h3>
-      <p>Turn interactive features off/on.</p>
-      <div className="source-link">
-        <a
-          href="https://github.com/visgl/react-map-gl/tree/6.1-release/examples/interaction"
-          target="_new"
-        >
-          View Code ↗
-        </a>
+      <div className="box">
+        <div className="label">Map layer</div>
+        <MapLayerDropdown />
       </div>
-      <hr />
-
-      {Object.keys(settings).map(name => renderSetting(name, settings[name]))}
-
-      <hr />
-
-      <div>
-        <div>
-          <label>Dragging</label>
-          <span>{interactionState.isDragging && 'Yes'}</span>
-        </div>
-        <div>
-          <label>Transition</label>
-          <span>{interactionState.inTransition && 'Yes'}</span>
-        </div>
-        <div>
-          <label>Panning</label>
-          <span>{interactionState.isPanning && 'Yes'}</span>
-        </div>
-        <div>
-          <label>Rotating</label>
-          <span>{interactionState.isRotating && 'Yes'}</span>
-        </div>
-        <div>
-          <label>Zooming</label>
-          <span>{interactionState.isZooming && 'Yes'}</span>
-        </div>
+      <div className="box box-border">
+        <div className="label">Filter</div>
+        <FilterDropdown />
       </div>
+      <div className="box">
+        <div className="label">Year</div>
+        <YearDropdown />
+      </div>
+      <style jsx>{styles}</style>
     </div>
   );
 }
 
 export default React.memo(ControlPanel);
+
+const styles = css`
+  .control-panel {
+    min-width: 316px;
+    max-width: 100%;
+    height: 84px;
+    background: #fff;
+    position: fixed;
+    top: 23px;
+    display: flex;
+    justify-content: space-between;
+    background: #191A1A;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 0px 20px 20px 0px;
+  }
+  .label {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    color: #D2D1D1;
+    margin-bottom: 6px;
+  }
+  .box {
+    padding: 18px 20px;
+  }
+  .box-border {
+    border-left: 1px solid #343535;
+    border-right: 1px solid #343535;
+  }
+`
